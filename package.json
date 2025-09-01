@@ -1,5 +1,5 @@
 {
-  "name": "groceries-api",
+  "name": "cartify-api",
   "scripts": {
     "dev": "bun run --hot src/index.ts"
   },
