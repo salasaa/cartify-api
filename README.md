@@ -8,15 +8,16 @@ Considering that in my previous project I created the Cartify grocery list app, 
 
 ## REST API Specification
 
-| Endpoint         | HTTP Method | Description                                        |
-| ---------------- | ----------- | -------------------------------------------------- |
-| `/groceries`     | `GET`       | Get all groceries                                  |
-| `/groceries/:id` | `GET`       | Get grocery by id                                  |
-| `/groceries`     | `POST`      | Create a new grocery                               |
-| `/groceries/:id` | `DELETE`    | Delete grocery item by id                          |
-| `/groceries/:id` | `DELETE`    | Delete all grocery items                           |
-| `/groceries/:id` | `PATCH`     | Update grocery item by id                          |
-| `/groceries/:id` | `PUT`       | Update grocery item by id, create if doesn't exist |
+| Endpoint               | HTTP Method | Description                                        |
+| ---------------------- | ----------- | -------------------------------------------------- |
+| `/groceries`           | `GET`       | Get all groceries                                  |
+| `/groceries/:id`       | `GET`       | Get grocery by id                                  |
+| `/groceries/:category` | `GET`       | Get grocery by category                            |
+| `/groceries`           | `POST`      | Create a new grocery                               |
+| `/groceries/:id`       | `DELETE`    | Delete grocery item by id                          |
+| `/groceries/`          | `DELETE`    | Delete all grocery items                           |
+| `/groceries/:id`       | `PATCH`     | Update grocery item by id                          |
+| `/groceries/:id`       | `PUT`       | Update grocery item by id, create if doesn't exist |
 
 ## Development
 

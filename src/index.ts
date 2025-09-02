@@ -541,6 +541,7 @@ app.get("/groceries", (c) => {
   return c.json(groceries);
 });
 
+// GET grocery item by ID
 app.get("/groceries/:id", (c) => {
   const id = Number(c.req.param("id"));
 
@@ -555,6 +556,36 @@ app.get("/groceries/:id", (c) => {
   return c.json(grocery);
 });
 
-app.post();
+// GET grocery by category
+app.get("/groceries/category/:category", (c) => {
+  const category = c.req.param("category");
+
+  const filteredGroceries: grocery[] = groceries.filter((grocery) => {
+    return grocery.category.toLowerCase() === category.toLowerCase();
+  });
+
+  //ini belum jalan
+  if (!filteredGroceries.length) {
+    return c.json({ message: "No category found" }, 404);
+  }
+
+  return c.json(filteredGroceries);
+});
+
+// POST a new grocery
+app.post("/groceries", async (c) => {
+  const body = await c.req.json();
+
+  const newGrocery = {
+    id: groceries[groceries.length - 1].id + 1,
+    ...body,
+  };
+  groceries = [newGrocery.id, ...groceries, newGrocery];
+
+  return c.json({
+    message: "Grocery added successfully",
+    data: newGrocery,
+  });
+});
 
 export default app;
