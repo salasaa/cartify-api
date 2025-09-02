@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-type grocery = {
+type Grocery = {
   id: number;
   name: string;
   category: string;
@@ -11,7 +11,7 @@ type grocery = {
   unit?: string;
 };
 
-let groceries: grocery[] = [
+let groceries: Grocery[] = [
   {
     id: 1,
     name: "Apple",
@@ -560,13 +560,20 @@ app.get("/groceries/:id", (c) => {
 app.get("/groceries/category/:category", (c) => {
   const category = c.req.param("category");
 
-  const filteredGroceries: grocery[] = groceries.filter((grocery) => {
-    return grocery.category.toLowerCase() === category.toLowerCase();
-  });
+  // return c.json(category);
 
-  //ini belum jalan
-  if (!filteredGroceries.length) {
-    return c.json({ message: "No category found" }, 404);
+  const filteredGroceries = groceries.filter((grocery) =>
+    grocery.category.toLowerCase().includes(category.toLowerCase())
+  );
+
+  if (!filteredGroceries) {
+    return c.json(
+      {
+        message: "No category found",
+        data: null,
+      },
+      404
+    );
   }
 
   return c.json(filteredGroceries);
