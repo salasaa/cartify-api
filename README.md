@@ -6,6 +6,7 @@ REST API to explore grocery information, specifically for daily needs.
 
 Considering that in my previous project I created the Cartify grocery list app, I want to create a simple API to provide information about daily grocery needs.
 
+
 ## REST API Specification
 
 | Endpoint               | HTTP Method | Description                                        |
@@ -18,6 +19,7 @@ Considering that in my previous project I created the Cartify grocery list app, 
 | `/groceries/`          | `DELETE`    | Delete all grocery items                           |
 | `/groceries/:id`       | `PATCH`     | Update grocery item by id                          |
 | `/groceries/:id`       | `PUT`       | Update grocery item by id, create if doesn't exist |
+
 
 ## Development
 
