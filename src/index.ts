@@ -69,18 +69,30 @@ app.post("/groceries", async (c) => {
   });
 });
 
+// DELETE all groceries
+app.delete("/groceries", (c) => {
+  groceries.splice(0, groceries.length);
+
+  return c.json({ message: "All groceries deleted successfully" });
+});
+
+// DELETE a grocery by ID
 app.delete("/groceries/:id", (c) => {
   const id = Number(c.req.param("id"));
 
-  const groceryIndex = groceries.findIndex((grocery) => grocery.id === id);
+  const isGrocery = groceries.find((grocery) => grocery.id === id);
 
-  if (groceryIndex === -1) {
+  if (!isGrocery) {
     return c.json({ message: "Grocery not found" }, 404);
   }
 
-  groceries.splice(groceryIndex, 1);
+  const newGroceries = groceries.filter((grocery) => grocery.id !== id);
 
-  return c.json({ message: "Grocery deleted successfully" });
+  groceries.splice(0, groceries.length, ...newGroceries);
+
+  return c.json({ deleteGrocery: isGrocery, message: "deleted successfully" });
 });
+
+// PATCH update grocery by ID
 
 export default app;
