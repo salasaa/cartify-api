@@ -15,21 +15,6 @@ app.get("/groceries", (c) => {
   return c.json(groceries);
 });
 
-// GET grocery item by ID
-app.get("/groceries/:id", (c) => {
-  const id = Number(c.req.param("id"));
-
-  const grocery = groceries.find((grocery) => {
-    return grocery.id === id;
-  });
-
-  if (!grocery) {
-    return c.json({ message: "Grocery not found" }, 404);
-  }
-
-  return c.json(grocery);
-});
-
 // GET grocery by category
 app.get("/groceries/category/:category", (c) => {
   const category = c.req.param("category");
@@ -53,20 +38,38 @@ app.get("/groceries/category/:category", (c) => {
   return c.json(filteredGroceries);
 });
 
+// GET grocery item by ID
+app.get("/groceries/:id", (c) => {
+  const id = Number(c.req.param("id"));
+
+  const grocery = groceries.find((grocery) => {
+    return grocery.id === id;
+  });
+
+  if (!grocery) {
+    return c.json({ message: "Grocery not found" }, 404);
+  }
+
+  return c.json(grocery);
+});
+
 // POST a new grocery
 app.post("/groceries", async (c) => {
   const body = await c.req.json();
 
   const newGrocery = {
-    id: groceries[groceries.length - 1].id + 1,
+    id: groceries[groceries.length - 1]?.id + 1 || 1,
     ...body,
   };
   groceries = [newGrocery.id, ...groceries, newGrocery];
 
-  return c.json({
-    message: "Grocery added successfully",
-    data: newGrocery,
-  });
+  return c.json(
+    {
+      message: "Grocery added successfully",
+      data: newGrocery,
+    },
+    201
+  );
 });
 
 // DELETE all groceries
