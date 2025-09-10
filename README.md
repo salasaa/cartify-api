@@ -25,6 +25,8 @@ Design database shema using dbdiagram.io
 
 - [cartify-api database schema](https://dbdiagram.io/d/cartify-api-database-schema-68c0f6cd61a46d388e4f18df)
 
+-
+
 ## Development
 
 To install dependencies:
