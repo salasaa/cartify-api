@@ -25,7 +25,7 @@ Design database shema using dbdiagram.io
 
 - [cartify-api database schema](https://dbdiagram.io/d/cartify-api-database-schema-68c0f6cd61a46d388e4f18df)
 
--
+- [cartify-api database schema image](./public/cartify-api-database-schema.png)
 
 ## Development
 
