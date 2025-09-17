@@ -1,23 +1,30 @@
-import * as pg from "pg";
+import { PrismaClient } from "./src/generated/prisma";
 
-const client = new pg.Client({
-  connectionString: process.env.DATABASE_URL,
-});
-await client.connect();
+const prisma = new PrismaClient();
 
-type Grocery = {
-  id: number;
-  name: string;
-  category: string;
-  description: string;
-};
+async function main() {
+  const newGrocery = await prisma.grocery.create({
+    data: {
+      name: "Banana",
+      description: "A yellow fruit",
+      price: 1,
+      unit: "piece",
+      category: "Fruits",
+    },
+  });
 
-try {
-  const result = await client.query("SELECT * FROM groceries");
-  const groceries: Grocery[] = result.rows;
-  console.log({ groceries });
-} catch (error) {
-  console.error("Failed to connect to the database", error);
-} finally {
-  await client.end();
+  console.log("Created new Grocery:", newGrocery);
+
+  const groceries = await prisma.grocery.findMany();
+  console.log(groceries);
 }
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
