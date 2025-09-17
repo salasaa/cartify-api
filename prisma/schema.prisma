@@ -17,7 +17,9 @@ generator client {
 model Grocery {
   id          Int @id @default(autoincrement())
   name        String
-  description String?
-
- 
+  description String
+  price       Float 
+  unit        String
+  category    String
+  createdAt   DateTime @default(now())
 }
