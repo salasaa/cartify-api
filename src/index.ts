@@ -24,6 +24,17 @@ app.get("/groceries/:id", async (c) => {
   return c.json(grocery);
 });
 
+//GET by Category
+app.get("/groceries/category/:category", async (c) => {
+  const category = c.req.param("category");
+  const groceries = await db.grocery.findMany({ where: { category } });
+
+  if (!groceries) return c.notFound();
+
+  return c.json(groceries);
+});
+
+//POST a New
 app.post("/groceries", async (c) => {
   const body = await c.req.json();
 
@@ -49,7 +60,7 @@ app.delete("/groceries/:id", async (c) => {
     return c.notFound();
   }
 
-  return c.json({ message: "deleted successfully" });
+  return c.json({ isGrocery: { id }, message: "deleted successfully" });
 });
 
 // PATCH update grocery by ID
