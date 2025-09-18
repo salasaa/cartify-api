@@ -6,10 +6,10 @@ async function main() {
   const newGrocery = await prisma.grocery.create({
     data: {
       name: "Banana",
+      category: "Fruits",
       description: "A yellow fruit",
       price: 1,
       unit: "piece",
-      category: "Fruits",
     },
   });
 

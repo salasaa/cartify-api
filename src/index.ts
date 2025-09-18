@@ -24,30 +24,52 @@ app.get("/groceries/:id", async (c) => {
   return c.json(grocery);
 });
 
-// DELETE all groceries
-app.delete("/groceries", (c) => {
-  groceries.splice(0, groceries.length);
+app.post("/groceries", async (c) => {
+  const body = await c.req.json();
 
-  return c.json({ message: "All groceries deleted successfully" });
+  const newGrocery = await db.grocery.create({
+    data: {
+      name: body.name,
+      category: body.category,
+      description: body.description,
+      price: body.price,
+      unit: body.unit,
+    },
+  });
+  return c.json(newGrocery, 201);
 });
 
 // DELETE a grocery by ID
-app.delete("/groceries/:id", (c) => {
+app.delete("/groceries/:id", async (c) => {
   const id = Number(c.req.param("id"));
 
-  const isGrocery = groceries.find((grocery) => grocery.id === id);
+  const isGrocery = await db.grocery.delete({ where: { id } });
 
   if (!isGrocery) {
-    return c.json({ message: "Grocery not found" }, 404);
+    return c.notFound();
   }
 
-  const newGroceries = groceries.filter((grocery) => grocery.id !== id);
-
-  groceries.splice(0, groceries.length, ...newGroceries);
-
-  return c.json({ deleteGrocery: isGrocery, message: "deleted successfully" });
+  return c.json({ message: "deleted successfully" });
 });
 
 // PATCH update grocery by ID
+app.patch("/groceries/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+
+  const body = await c.req.json();
+
+  const updatedGrocery = await db.grocery.update({
+    where: { id },
+    data: {
+      name: body.name,
+      category: body.category,
+      description: body.description,
+      price: body.price,
+      unit: body.unit,
+    },
+  });
+
+  return c.json(updatedGrocery);
+});
 
 export default app;
