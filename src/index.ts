@@ -15,6 +15,39 @@ app.get("/groceries", async (c) => {
   return c.json(groceries);
 });
 
+//POST new category
+app.post("/categories", async (c) => {
+  const body = await c.req.json();
+
+  const newCategory = await db.category.create({
+    data: {
+      name: body.name,
+      slug: body.slug,
+    },
+  });
+  return c.json(newCategory, 201);
+});
+
+//GET all categories
+app.get("/categories", async (c) => {
+  const categories = await db.category.findMany();
+
+  return c.json(categories);
+});
+
+//GET by Category
+app.get("/groceries/category/:categorySlug", async (c) => {
+  const categorySlug = c.req.param("categorySlug");
+  const groceries = await db.grocery.findMany({
+    where: { Category: { slug: categorySlug } },
+  });
+
+  if (!groceries) return c.notFound();
+
+  return c.json(groceries);
+});
+
+//GET grocery by ID
 app.get("/groceries/:id", async (c) => {
   const id = Number(c.req.param("id"));
   const grocery = await db.grocery.findUnique({ where: { id } });
@@ -24,27 +57,18 @@ app.get("/groceries/:id", async (c) => {
   return c.json(grocery);
 });
 
-//GET by Category
-app.get("/groceries/category/:category", async (c) => {
-  const category = c.req.param("category");
-  const groceries = await db.grocery.findMany({ where: { category } });
-
-  if (!groceries) return c.notFound();
-
-  return c.json(groceries);
-});
-
-//POST a New
+//POST new grocery
 app.post("/groceries", async (c) => {
   const body = await c.req.json();
 
   const newGrocery = await db.grocery.create({
     data: {
       name: body.name,
-      category: body.category,
+
       description: body.description,
       price: body.price,
       unit: body.unit,
+      Category: { connect: { slug: body.categorySlug } },
     },
   });
   return c.json(newGrocery, 201);
@@ -63,6 +87,22 @@ app.delete("/groceries/:id", async (c) => {
   return c.json({ isGrocery: { id }, message: "deleted successfully" });
 });
 
+// PATCH update category by ID
+app.patch("/categories/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+  const body = await c.req.json();
+
+  const updatedCategory = await db.category.update({
+    where: { id },
+    data: {
+      name: body.name,
+      slug: body.slug,
+    },
+  });
+
+  return c.json(updatedCategory);
+});
+
 // PATCH update grocery by ID
 app.patch("/groceries/:id", async (c) => {
   const id = Number(c.req.param("id"));
@@ -73,7 +113,7 @@ app.patch("/groceries/:id", async (c) => {
     where: { id },
     data: {
       name: body.name,
-      category: body.category,
+      Category: body.category,
       description: body.description,
       price: body.price,
       unit: body.unit,
