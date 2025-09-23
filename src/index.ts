@@ -39,7 +39,7 @@ app.get("/categories", async (c) => {
 app.get("/groceries/category/:categorySlug", async (c) => {
   const categorySlug = c.req.param("categorySlug");
   const groceries = await db.grocery.findMany({
-    where: { Category: { slug: categorySlug } },
+    where: { category: { slug: categorySlug } },
   });
 
   if (!groceries) return c.notFound();
@@ -64,11 +64,10 @@ app.post("/groceries", async (c) => {
   const newGrocery = await db.grocery.create({
     data: {
       name: body.name,
-
       description: body.description,
       price: body.price,
       unit: body.unit,
-      Category: { connect: { slug: body.categorySlug } },
+      category: { connect: { slug: body.categorySlug } },
     },
   });
   return c.json(newGrocery, 201);
@@ -113,10 +112,10 @@ app.patch("/groceries/:id", async (c) => {
     where: { id },
     data: {
       name: body.name,
-      Category: body.category,
       description: body.description,
       price: body.price,
       unit: body.unit,
+      category: { connect: { slug: body.categorySlug } },
     },
   });
 
