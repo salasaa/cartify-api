@@ -33,8 +33,7 @@ model Grocery {
   price       Float
   unit        String
 
-  categoryId   Int?
-  categorySlug String?
+  categoryId Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
