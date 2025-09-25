@@ -39,7 +39,8 @@ app.get("/categories", async (c) => {
 app.get("/groceries/category/:categorySlug", async (c) => {
   const categorySlug = c.req.param("categorySlug");
   const groceries = await db.grocery.findMany({
-    where: { Category: { slug: categorySlug } },
+    where: { category: { slug: categorySlug } },
+    include: { category: true },
   });
 
   if (!groceries) return c.notFound();
@@ -50,7 +51,10 @@ app.get("/groceries/category/:categorySlug", async (c) => {
 //GET grocery by ID
 app.get("/groceries/:id", async (c) => {
   const id = Number(c.req.param("id"));
-  const grocery = await db.grocery.findUnique({ where: { id } });
+  const grocery = await db.grocery.findUnique({
+    where: { id },
+    include: { category: true },
+  });
 
   if (!grocery) return c.notFound();
 
@@ -65,11 +69,13 @@ app.post("/groceries", async (c) => {
     data: {
       name: body.name,
 
-      description: body.description,
+      description: body.description ?? "No description",
       price: body.price,
       unit: body.unit,
-      Category: { connect: { slug: body.categorySlug } },
+
+      category: { connect: { slug: body.categorySlug } },
     },
+    include: { category: true },
   });
   return c.json(newGrocery, 201);
 });
@@ -106,17 +112,16 @@ app.patch("/categories/:id", async (c) => {
 // PATCH update grocery by ID
 app.patch("/groceries/:id", async (c) => {
   const id = Number(c.req.param("id"));
-
   const body = await c.req.json();
 
   const updatedGrocery = await db.grocery.update({
     where: { id },
     data: {
       name: body.name,
-      Category: body.category,
       description: body.description,
       price: body.price,
       unit: body.unit,
+      category: body.categorySlug,
     },
   });
 
