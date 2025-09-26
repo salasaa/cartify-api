@@ -48,6 +48,18 @@ app.get("/groceries/category/:categorySlug", async (c) => {
   return c.json(groceries);
 });
 
+//GET categroy by ID
+app.get("/categories/:id", async (c) => {
+  const id = Number(c.req.param("id"));
+  const category = await db.category.findUnique({
+    where: { id },
+  });
+
+  if (!category) return c.notFound();
+
+  return c.json(category);
+});
+
 //GET grocery by ID
 app.get("/groceries/:id", async (c) => {
   const id = Number(c.req.param("id"));
