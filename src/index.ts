@@ -35,7 +35,7 @@ app.get("/categories", async (c) => {
   return c.json(categories);
 });
 
-//GET by Category
+//GET filter Category
 app.get("/groceries/category/:categorySlug", async (c) => {
   const categorySlug = c.req.param("categorySlug");
   const groceries = await db.grocery.findMany({
