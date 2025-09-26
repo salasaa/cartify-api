@@ -33,10 +33,11 @@ model Grocery {
   price       Float
   unit        String
 
-  categoryId Int?
+  categoryId   Int?
+  categorySlug String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  category Category? @relation(fields: [categoryId], references: [id])
+  category Category? @relation(fields: [categorySlug], references: [slug])
 }
