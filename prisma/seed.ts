@@ -243,7 +243,7 @@ async function seedCategories() {
     data: dataSeedGroceries
       .map((x) => x.categorySlug)
       .filter((x, i, r) => r.indexOf(x) == i)
-      .map((x) => ({ name: x, slug: x })),
+      .map((x) => ({ name: x, slug: x.toLowerCase() })),
     skipDuplicates: true,
   });
 }
