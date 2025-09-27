@@ -238,6 +238,16 @@ let dataSeedGroceries: DataSeedGrocery[] = [
   },
 ];
 
+async function seedCategories() {
+  await prisma.category.createMany({
+    data: dataSeedGroceries
+      .map((x) => x.categorySlug)
+      .filter((x, i, r) => r.indexOf(x) == i)
+      .map((x) => ({ name: x, slug: x })),
+    skipDuplicates: true,
+  });
+}
+
 async function seedGroceries() {
   for (const dataSeedGrocery of dataSeedGroceries) {
     const { categorySlug, ...grocery } = dataSeedGrocery;
@@ -253,6 +263,7 @@ async function seedGroceries() {
 }
 
 async function main() {
+  await seedCategories();
   await seedGroceries();
 }
 
